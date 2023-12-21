@@ -1,4 +1,4 @@
-# Projeto Vue.js com Integração de API Flask
+# Vue.js Project with Flask API Integration
 
 This template should help get you started developing with Vue 3 in Vite.
 
