@@ -1,6 +1,6 @@
 # Vue.js Project with Flask API Integration
 
-This template should help get you started developing with Vue 3 in Vite.
+This project is a web application developed using Vue.js, a JavaScript framework. The main goal is to demonstrate how to extract a Flask API with endpoints to list, create, update and delete data.
 
 ## Customize configuration
 
