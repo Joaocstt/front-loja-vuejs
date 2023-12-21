@@ -2,9 +2,6 @@
 
 This project is a web application developed using Vue.js, a JavaScript framework. The main goal is to demonstrate how to extract a Flask API with endpoints to list, create, update and delete data.
 
-## Customize configuration
-
-See [Vite Configuration Reference](https://vitejs.dev/config/).
 
 ## Project Setup
 
