@@ -5,7 +5,7 @@
     </div>
     <div class="mx-auto max-w-2xl text-center">
       <h2 class="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">Faça o cadastro do produto</h2>
-      <p class="mt-2 text-lg leading-8 text-gray-600">Preencha as informações do produtos.</p>
+      <p class="mt-2 text-lg leading-8 text-gray-600">Preencha as informações do produto.</p>
     </div>
     <form @submit.prevent="submitForm" class="mx-auto mt-16 max-w-xl sm:mt-20">
       <div class="grid grid-cols-1 gap-x-8 gap-y-6 sm:grid-cols-2">
@@ -36,11 +36,15 @@
   </div>
   </template>
   <script setup>
+
     import axios from "axios";
     import {reactive} from "vue";
-  
-    const emit = defineEmits(['postCreated'])
-  
+    import 'vue-toast-notification/dist/theme-sugar.css';
+    import {useToast} from "vue-toast-notification";
+
+    const $toast = useToast();
+
+    const emit = defineEmits(['postCreated']);
     const form = reactive({
       name: '',
       quantity: '',
@@ -51,18 +55,27 @@
       let data = {
         name: form.name,
         quantity: Number(form.quantity),
-        value: Number(form.value)
+        value: form.value
       }
+
       axios.post('produtos', data)
         .then(response => {
           if(response.status === 201) {
             form.name = ''
             form.quantity = ''
             form.value = ''
-            return emit('postCreated', response.data)
+            $toast.success('Produto cadastrado com sucesso!', {
+              position: 'top-right',
+              duration: 5000,
+            })
+            return emit('postCreated', response.data);
           }
-  
-          return console.log(response.data.errors)
+
+          $toast.error(response.data.errors, {
+            position: 'top-right',
+            duration: 5000,
+          })
+
         })
     }
   

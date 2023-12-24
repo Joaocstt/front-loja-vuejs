@@ -1,8 +1,11 @@
 <template>
 
-    <FormProduct />
+    <FormProduct @postCreated="postCreated"/>
    <div class="container mx-auto mt-20">
      <ul role="list" class="divide-y divide-gray-100">
+        <div v-if="!productsAll.length">
+          <li>Não há nenhum produto cadastrado</li>
+        </div>
        <li
            class="flex justify-between gap-x-6 py-5"
             v-for="product in productsAll"
@@ -16,7 +19,7 @@
          <div class="hidden shrink-0 sm:flex sm:flex-col sm:items-end">
             <div class="flex gap-3">
               <a class="text-sm leading-6 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full cursor-pointer">Editar</a>
-              <a class="text-sm leading-6 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-full cursor-pointer">Deletar</a>
+              <a @click.prevent="deleteProduct(product.id)" class="text-sm leading-6 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-full cursor-pointer">Deletar</a>
               <a @click.prevent="show(product.id)" class="text-sm leading-6 bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded-full cursor-pointer">Mostrar</a>
             </div>
          </div>
@@ -39,8 +42,7 @@
                 <h3 class="text-base font-semibold leading-6 text-gray-900" id="modal-title">{{ productId.name }}</h3>
                 <div class="mt-2">
                   <p class="text-sm text-gray-500">Quantidade: {{ productId.quantity }}</p>
-                  <p class="text-sm text-gray-500">Valor: {{ productId.value }}R$</p>
-
+                  <p class="text-sm text-gray-500">Valor: {{ productId.value }} R$</p>
                 </div>
               </div>
             </div>
@@ -51,10 +53,7 @@
         </div>
       </div>
     </div>
-
   </div>
-
-
 </template>
 
 
@@ -71,12 +70,25 @@ const productId = ref(null);
 
 const Modal = ref(false);
 
+function postCreated(value) {
+  productsAll.value.unshift(value)
+}
+
 onMounted(() => {
     axios.get('produtos')
         .then((response) => {
           productsAll.value = response.data;
         })
 })
+
+function deleteProduct(id) {
+  axios.delete(`produtos/${id}`)
+      .then(() => {
+        let all = productsAll.value;
+        const idProductDelete = productsAll.value.findIndex(product => product.id === id);
+        all.splice(idProductDelete, 1);
+      })
+}
 
 function show(id) {
     productId.value = productsAll.value.find(product => product.id === id);
